@@ -1,6 +1,14 @@
 // products-data.js
 const initialProducts = [
   {
+        id: "1741388377287",
+        name: "হা",
+        price: "498",
+        image: "https://res.cloudinary.com/dnvm88wfi/image/upload/v1741326260/cld-sample-5.jpg",
+        tags: "Boys, girls",
+        description: "হা"
+    },
+  {
         id: "1741376828264",
         name: "ডন",
         price: "999",
