@@ -61,6 +61,7 @@
     font-size: 24px;
     cursor: pointer;
 }
+
 /* সার্চ রেজাল্টের জন্য স্টাইল */
 #searchResults {
     top: 100%; /* সার্চ বারের ঠিক নিচে */
@@ -79,6 +80,7 @@
 #searchResults .search-card:hover {
     background-color: #f7fafc; /* হোভার ইফেক্ট */
 }
+
 /* সার্চ বার স্টাইল */
 .search-bar {
     position: relative;
@@ -140,4 +142,9 @@
     .search-bar {
         display: none;
     }
+}
+
+/* প্রোডাক্ট কার্ড হাইলাইট স্টাইল */
+.border-teal-500 {
+    border-color: #38b2ac;
 }
