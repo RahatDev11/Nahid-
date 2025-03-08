@@ -1,6 +1,15 @@
 // products-data.js
 const initialProducts = [
   {
+        id: "1741455671446",
+        name: "boys ",
+        price: "999",
+        category: "shirts",
+        image: "https://res.cloudinary.com/dnvm88wfi/image/upload/v1741326251/samples/people/jazz.jpg",
+        tags: "boys",
+        description: "Boys "
+    },
+  {
         id: "1741421645699",
         name: "T-shirt ",
         price: "5999",
