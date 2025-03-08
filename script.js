@@ -1,5 +1,51 @@
-let products = JSON.parse(localStorage.getItem('products')) || [];
+let products = []; // প্রোডাক্ট ডাটা সরাসরি script.js ফাইলে থাকবে
 let isAdmin = false;
+
+// প্রোডাক্ট ডাটা
+const initialProducts = [
+    {
+        id: "1741449736422",
+        name: "Fun ",
+        price: "999",
+        category: "shirts",
+        image: "https://res.cloudinary.com/dnvm88wfi/image/upload/v1741326249/samples/food/dessert.jpg",
+        tags: "Fun, ",
+        description: "Fun "
+    },
+    
+    {
+        id: "1741421645699",
+        name: "T-shirt ",
+        price: "5999",
+        category: "shirts",
+        image: "https://res.cloudinary.com/dnvm88wfi/image/upload/v1741412399/tshirt-8726716_1280_vyvosl.jpg,https://res.cloudinary.com/dnvm88wfi/image/upload/v1741412399/tshirt-7979852_1280_fn9tw2.jpg,https://res.cloudinary.com/dnvm88wfi/image/upload/v1741412399/tshirt-7979854_1280_jj0vhg.jpg",
+        tags: "T-shirt, ganji, shirt, টিশার্ট, ",
+        description: "টি-শার্ট বা টি হচ্ছে এক প্রকার শার্ট, যা ঘাড়ের অংশ থেকে দেহের ওপরাংশে কবন্ধের বেশিরভাগ স্থানকে ঢেকে রাখে। ইংরেজি 'টি' (T) আকৃতির ন্যায় দেখতে, তাই এ পোশাকটির নাম টি-শার্ট হয়েছে। টি-শার্টে সাধারণত কোনো বোতাম বা কলার থাকে না। সচারচর এটি হয় গোলাকার ও খাটো হাতাযুক্ত। যদিও কিছু ক্ষেত্রে মানুষ ভুলবশত খাটো হাতাযুক্ত যে-কোনো শার্ট বা ব্লাউজকেই টি-শার্ট ভেবে ভুল করে। পোলো শার্ট বা অন্যান্য কলারযুক্ত শার্ট প্রকৃতপক্ষে টি-শার্ট নয়। কারণ এ ধরনের শার্টের হাতা কাঁধের পাশ দিয়ে সামান্য একটু বাড়তি থাকে, এবং খাটো হাতার ক্ষেত্রে তা কনুই পর্যন্ত হতে পারে।"
+    },
+    {
+        id: "1741365548108",
+        name: "Dog",
+        price: "5899",
+        image: "https://res.cloudinary.com/dnvm88wfi/image/upload/v1741326251/samples/animals/three-dogs.jpg",
+        tags: "Dogs",
+        description: "This is dogs"
+    },
+    // এখানে নতুন প্রোডাক্ট যোগ করুন
+    {
+        id: "1741365548109",
+        name: "New Product",
+        price: "999",
+        image: "https://res.cloudinary.com/dnvm88wfi/image/upload/v1741326248/sample.jpg",
+        tags: "new,tag",
+        description: "New product description"
+    }
+];
+
+// প্রোডাক্ট ডাটা লোড করুন
+function loadProductsFromData() {
+    products = initialProducts; // সরাসরি initialProducts অ্যারে থেকে ডাটা লোড করুন
+    loadProducts(); // প্রোডাক্ট লোড করুন
+}
 
 // মেনু টগল
 function toggleMenu() {
@@ -30,7 +76,6 @@ document.getElementById("loginForm").addEventListener("submit", function(e) {
         closeModal('loginModal');
         document.getElementById('product-update').classList.remove("hidden");
         isAdmin = true;
-        loadProducts();
     } else {
         alert('ভুল লগইন তথ্য!');
     }
@@ -41,17 +86,18 @@ function filterProducts(category) {
     const filteredProducts = category === 'all' ? products : products.filter(product => product.category === category);
     loadProducts(filteredProducts);
 }
+
 // প্রোডাক্ট লোড করুন
 function loadProducts(filteredProducts = products) {
     const productList = document.getElementById("productList");
-    productList.innerHTML = "";
+    productList.innerHTML = ""; // প্রথমে সব প্রোডাক্ট ডিলিট করুন
     
     filteredProducts.forEach(product => {
         const card = document.createElement("div");
         card.className = "bg-white p-4 rounded-lg shadow-lg hover:shadow-xl transition-shadow cursor-pointer";
+        card.setAttribute("data-product-id", product.id); // প্রোডাক্ট আইডি যোগ করুন
         card.onclick = () => showProductDetail(product.id);
         
-        // হোয়াটসঅ্যাপ মেসেজ জেনারেট
         const imageLinks = product.image.split(',').map((img, index) => 
             `ছবি-${index + 1}: ${img.trim()}`).join('\n');
         
@@ -74,12 +120,6 @@ ${imageLinks}
                    class="bg-green-500 text-white px-3 py-1 rounded text-sm hover:bg-green-600">
                     কিনুন
                 </a>
-                ${isAdmin ? `
-                <div class="flex space-x-2">
-                    <button onclick="event.stopPropagation(); editProduct('${product.id}')" class="bg-yellow-500 text-white px-3 py-1 rounded text-sm hover:bg-yellow-600">এডিট</button>
-                    <button onclick="event.stopPropagation(); deleteProduct('${product.id}')" class="bg-red-500 text-white px-3 py-1 rounded text-sm hover:bg-red-600">ডিলিট</button>
-                </div>
-                ` : ''}
             </div>
         `;
         productList.appendChild(card);
@@ -91,7 +131,7 @@ function showProductDetail(productId) {
     window.location.href = `product-detail.html?id=${productId}`;
 }
 
-// নতুন প্রোডাক্ট যুক্ত করুন
+// নতুন প্রোডাক্ট ডাটা জেনারেট করুন
 document.getElementById("productForm").addEventListener("submit", function(e) {
     e.preventDefault();
     const imageUrls = Array.from(document.querySelectorAll('#imageInputs input'))
@@ -108,10 +148,7 @@ document.getElementById("productForm").addEventListener("submit", function(e) {
         description: document.getElementById("productDescription").value
     };
     
-    products.push(newProduct);
-    localStorage.setItem("products", JSON.stringify(products));
-    loadProducts();
-    
+    // কোড জেনারেট করুন
     document.getElementById("generatedCode").textContent = 
     `{
         id: "${newProduct.id}",
@@ -123,40 +160,6 @@ document.getElementById("productForm").addEventListener("submit", function(e) {
         description: "${newProduct.description}"
     },`;
 });
-
-// প্রোডাক্ট ডিলিট করুন
-function deleteProduct(productId) {
-    if (confirm('আপনি কি এই প্রোডাক্টটি ডিলিট করতে চান?')) {
-        products = products.filter(p => p.id !== productId);
-        localStorage.setItem("products", JSON.stringify(products));
-        loadProducts();
-    }
-}
-
-// সমস্ত ডাটা ডিলিট করুন
-function resetProducts() {
-    if(confirm('সকল প্রোডাক্ট ডিলিট করতে চান?')) {
-        localStorage.clear();
-        products = [];
-        loadProducts();
-    }
-}
-
-// প্রোডাক্ট এডিট করুন
-function editProduct(productId) {
-    const product = products.find(p => p.id === productId);
-    if (product) {
-        document.getElementById("productName").value = product.name;
-        document.getElementById("productPrice").value = product.price;
-        document.getElementById("productCategory").value = product.category;
-        document.getElementById("imageInputs").innerHTML = product.image.split(',')
-            .map(url => `<input type="text" class="w-full p-2 border rounded mb-2" value="${url.trim()}">`)
-            .join('');
-        document.getElementById("productTags").value = product.tags.join(', ');
-        document.getElementById("productDescription").value = product.description;
-        document.getElementById("product-update").scrollIntoView({ behavior: 'smooth' });
-    }
-}
 
 // ছবি ফিল্ড যোগ করুন
 function addImageField() {
@@ -174,7 +177,8 @@ function searchProducts() {
     
     if (searchTerm.trim() === "") {
         searchResults.innerHTML = "";
-        searchResults.classList.add("hidden"); // সার্চ রেজাল্ট লুকানো
+        searchResults.classList.add("hidden");
+        loadProducts(); // সার্চ টার্ম খালি হলে সব প্রোডাক্ট দেখান
         return;
     }
     
@@ -211,7 +215,7 @@ function displaySearchResults(filteredProducts) {
         });
     }
     
-    searchResults.classList.remove("hidden"); // সার্চ রেজাল্ট দেখানো
+    searchResults.classList.remove("hidden");
 }
 
 // সার্চ বারের বাইরে ক্লিক করলে সার্চ রেজাল্ট লুকানো
@@ -220,9 +224,10 @@ document.addEventListener("click", (event) => {
     const searchResults = document.getElementById("searchResults");
     
     if (!searchBar.contains(event.target)) {
-        searchResults.classList.add("hidden"); // সার্চ রেজাল্ট লুকানো
+        searchResults.classList.add("hidden");
     }
 });
+
 // সার্চ বার ফোকাস
 function focusSearch() {
     const searchBar = document.getElementById('mainSearchBar');
@@ -238,6 +243,7 @@ function searchProductsDesktop() {
     if (searchTerm.trim() === "") {
         searchResults.innerHTML = "";
         searchResults.classList.add("hidden");
+        loadProducts(); // সার্চ টার্ম খালি হলে সব প্রোডাক্ট দেখান
         return;
     }
     
@@ -286,6 +292,7 @@ document.addEventListener("click", (event) => {
         searchResults.classList.add("hidden");
     }
 });
+
 // কোড কপি করুন
 function copyCode() {
     const code = document.getElementById("generatedCode").textContent;
@@ -302,12 +309,41 @@ function scrollToProducts() {
     }
 }
 
+// পণ্য দেখুন বাটনে ক্লিক করলে প্রোডাক্ট রিলোড করুন
+function reloadProducts() {
+    const productList = document.getElementById("productList");
+    productList.innerHTML = ""; // প্রথমে সব প্রোডাক্ট ডিলিট করুন
+    loadProductsFromData(); // তারপর প্রোডাক্ট লোড করুন
+}
+
 // প্রথম লোড
 document.addEventListener("DOMContentLoaded", () => {
-    loadProducts();
     document.addEventListener('click', (event) => {
         if (!event.target.closest('#dropdownMenu') && !event.target.closest('button[onclick="toggleMenu()"]')) {
             document.getElementById("dropdownMenu").classList.remove("open");
         }
     });
+
+    // URL থেকে প্রোডাক্ট আইডি প্যারামিটার নিন
+    const params = new URLSearchParams(window.location.search);
+    const productId = params.get('id');
+
+    // যদি প্রোডাক্ট আইডি থাকে, তাহলে সেই প্রোডাক্টের কার্ডে স্ক্রল করুন
+    if (productId) {
+        scrollToProduct(productId);
+    }
 });
+// প্রথম লোড
+document.addEventListener("DOMContentLoaded", () => {
+    loadProductsFromData(); // প্রোডাক্ট ডাটা লোড করুন
+    loadProducts(); // প্রোডাক্টগুলো ডিসপ্লে করুন
+});
+
+// প্রোডাক্টের কার্ডে স্ক্রল করার ফাংশন
+function scrollToProduct(productId) {
+    const productCard = document.querySelector(`[data-product-id="${productId}"]`);
+    if (productCard) {
+        productCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        productCard.classList.add('border-2', 'border-teal-500'); // কার্ডে হাইলাইট করুন
+    }
+        }
