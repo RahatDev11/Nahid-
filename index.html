@@ -5,65 +5,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>কাপড়ের ব্যবসা</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="products-data.js"></script>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
 <body class="bg-gray-100">
     <!-- হেডার -->
-<!-- হেডার -->
-<header class="bg-teal-500 text-white p-4 flex justify-between items-center relative">
-    <div class="text-lg font-bold">কাপড়ের ব্যবসা</div>
-    <!-- কম্পিউটার মেনু -->
-    <nav class="hidden md:flex space-x-4 items-center">
-        <a href="#home" class="hover:underline">হোম</a>
-        <a href="#about" class="hover:underline">আমাদের সম্পর্কে</a>
-        <div class="relative group">
-            <a href="javascript:void(0);" onclick="toggleSubMenu()" class="hover:underline">পণ্য সমূহ</a>
-            <div class="absolute hidden group-hover:block bg-white shadow-lg rounded-lg mt-2 w-48">
-                <a href="#shirts" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">শার্ট</a>
-                <a href="#pants" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">প্যান্ট</a>
-                <a href="#panjabi" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">পাঞ্জাবি</a>
+    <header class="bg-teal-500 text-white p-4 flex justify-between items-center relative">
+        <div class="text-lg font-bold">কাপড়ের ব্যবসা</div>
+        <!-- কম্পিউটার মেনু -->
+        <nav class="hidden md:flex space-x-4 items-center">
+            <a href="#home" class="hover:underline">হোম</a>
+            <a href="#about" class="hover:underline">আমাদের সম্পর্কে</a>
+            <a href="#products" class="hover:underline">পণ্য সমূহ</a>
+            <a href="#" onclick="openModal('loginModal')" class="hover:underline">এডমিন</a>
+            <!-- সার্চ বার (ডেস্কটপে শুধুমাত্র) -->
+            <div class="search-bar">
+                <input type="text" id="searchInputDesktop" class="search-input" placeholder="প্রোডাক্ট সার্চ করুন..." oninput="searchProductsDesktop()">
+                <i class="fas fa-search search-icon"></i>
+                <!-- সার্চ রেজাল্ট -->
+                <div id="searchResultsDesktop" class="search-results"></div>
             </div>
+        </nav>
+        <!-- মোবাইল মেনু বাটন -->
+        <button class="bg-white text-teal-500 px-4 py-2 rounded md:hidden" onclick="toggleMenu()">মেনু</button>
+        <!-- মোবাইল মেনু -->
+        <div id="dropdownMenu" class="hidden md:hidden absolute top-full right-0 bg-white shadow-lg rounded-lg mt-2 w-48">
+            <a href="#home" class="block px-4 py-2 text-gray-800 hover:bg-gray-100" onclick="hideMenu()">হোম</a>
+            <a href="#about" class="block px-4 py-2 text-gray-800 hover:bg-gray-100" onclick="hideMenu()">আমাদের সম্পর্কে</a>
+            <a href="#products" class="block px-4 py-2 text-gray-800 hover:bg-gray-100" onclick="hideMenu()">পণ্য সমূহ</a>
+            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100" onclick="openModal('loginModal')">এডমিন</a>
+            <a href="javascript:void(0);" class="block px-4 py-2 text-gray-800 hover:bg-gray-100" onclick="focusSearch()">
+                <i class="fas fa-search mr-2"></i>সার্চ
+            </a>
         </div>
-        <a href="#" onclick="openModal('loginModal')" class="hover:underline">এডমিন</a>
-        <!-- সার্চ বার (ডেস্কটপে শুধুমাত্র) -->
-        <div class="search-bar">
-            <input type="text" id="searchInputDesktop" class="search-input" placeholder="প্রোডাক্ট সার্চ করুন..." oninput="searchProductsDesktop()">
-            <i class="fas fa-search search-icon"></i>
-            <!-- সার্চ রেজাল্ট -->
-            <div id="searchResultsDesktop" class="search-results"></div>
+    </header>
+    <!-- সার্চ বার -->
+    <div class="p-2 bg-white shadow-md hidden w-80 mx-auto relative" id="mainSearchBar">
+        <div class="relative">
+            <input type="text" id="searchInput" class="w-full p-1 pl-8 border rounded" placeholder="প্রোডাক্ট সার্চ করুন..." oninput="searchProducts()">
+            <i class="fas fa-search absolute left-2 top-2 text-gray-400"></i>
         </div>
-    </nav>
-    <!-- মোবাইল মেনু বাটন -->
-    <button class="bg-white text-teal-500 px-4 py-2 rounded md:hidden" onclick="toggleMenu()">মেনু</button>
-    <!-- মোবাইল মেনু -->
-    <div id="dropdownMenu" class="hidden md:hidden absolute top-full right-0 bg-white shadow-lg rounded-lg mt-2 w-48">
-        <a href="#home" class="block px-4 py-2 text-gray-800 hover:bg-gray-100" onclick="hideMenu()">হোম</a>
-        <a href="#about" class="block px-4 py-2 text-gray-800 hover:bg-gray-100" onclick="hideMenu()">আমাদের সম্পর্কে</a>
-        <div>
-            <a href="javascript:void(0);" class="block px-4 py-2 text-gray-800 hover:bg-gray-100" onclick="toggleSubMenu()">পণ্য সমূহ</a>
-            <div id="subMenu" class="hidden pl-4">
-                <a href="#shirts" class="block px-4 py-2 text-gray-800 hover:bg-gray-100" onclick="hideMenu()">শার্ট</a>
-                <a href="#pants" class="block px-4 py-2 text-gray-800 hover:bg-gray-100" onclick="hideMenu()">প্যান্ট</a>
-                <a href="#panjabi" class="block px-4 py-2 text-gray-800 hover:bg-gray-100" onclick="hideMenu()">পাঞ্জাবি</a>
-            </div>
-        </div>
-        <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100" onclick="openModal('loginModal')">এডমিন</a>
-        <a href="javascript:void(0);" class="block px-4 py-2 text-gray-800 hover:bg-gray-100" onclick="focusSearch()">
-            <i class="fas fa-search mr-2"></i>সার্চ
-        </a>
+        <!-- সার্চ রেজাল্ট -->
+        <div id="searchResults" class="mt-2 max-h-60 overflow-y-auto absolute bg-white w-full shadow-lg rounded-lg z-50"></div>
     </div>
-</header>
-<!-- সার্চ বার -->
-<div class="p-2 bg-white shadow-md hidden w-80 mx-auto relative" id="mainSearchBar">
-    <div class="relative">
-        <input type="text" id="searchInput" class="w-full p-1 pl-8 border rounded" placeholder="প্রোডাক্ট সার্চ করুন..." oninput="searchProducts()">
-        <i class="fas fa-search absolute left-2 top-2 text-gray-400"></i>
-    </div>
-    <!-- সার্চ রেজাল্ট -->
-    <div id="searchResults" class="mt-2 max-h-60 overflow-y-auto absolute bg-white w-full shadow-lg rounded-lg z-50"></div>
-</div>
 
     <!-- মূল কন্টেন্ট -->
     <main class="p-4">
@@ -82,19 +66,20 @@
             </div>
         </section>
 
-<!-- পণ্য সমূহ -->
-<section id="products" class="mb-6">
-    <h2 class="text-xl font-bold text-center mb-4">পণ্য সমূহ</h2>
-    <div class="flex justify-center mb-4">
-        <div class="flex space-x-2">
-            <button onclick="filterProducts('all')" class="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600">সব</button>
-            <button onclick="filterProducts('shirts')" class="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600">শার্ট</button>
-            <button onclick="filterProducts('pants')" class="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600">প্যান্ট</button>
-            <button onclick="filterProducts('panjabi')" class="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600">পাঞ্জাবি</button>
-        </div>
-    </div>
-    <div id="productList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
-</section>
+        <!-- পণ্য সমূহ -->
+        <section id="products" class="mb-6">
+            <h2 class="text-xl font-bold text-center mb-4">পণ্য সমূহ</h2>
+            <div class="flex justify-center mb-4">
+                <div class="flex space-x-2">
+                    <button onclick="filterProducts('all')" class="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600">সব</button>
+                    <button onclick="filterProducts('shirts')" class="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600">শার্ট</button>
+                    <button onclick="filterProducts('pants')" class="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600">প্যান্ট</button>
+                    <button onclick="filterProducts('panjabi')" class="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600">পাঞ্জাবি</button>
+                </div>
+            </div>
+            <div id="productList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+        </section>
+
         <!-- এডমিন সেকশন -->
         <section id="product-update" class="hidden">
             <h2 class="text-xl font-bold text-center mb-4">প্রোডাক্ট আপডেট</h2>
@@ -132,12 +117,11 @@
                     <label for="productDescription" class="block text-gray-700">বিবরণ</label>
                     <textarea id="productDescription" class="w-full p-2 border rounded" rows="4" required></textarea>
                 </div>
-                <button type="submit" class="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600">সেভ করুন</button>
+                <button type="submit" class="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600">কোড জেনারেট করুন</button>
             </form>
             <div class="mt-4 bg-gray-100 p-4 rounded-lg">
                 <pre id="generatedCode" class="whitespace-pre-wrap"></pre>
                 <button onclick="copyCode()" class="bg-blue-500 text-white px-4 py-2 rounded mt-2 hover:bg-blue-600">কোড কপি করুন</button>
-                <button onclick="resetProducts()" class="bg-red-500 text-white px-4 py-2 rounded mt-2 hover:bg-red-600">সব ডাটা ডিলিট করুন</button>
             </div>
         </section>
     </main>
