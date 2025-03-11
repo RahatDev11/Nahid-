@@ -3,6 +3,15 @@ let isAdmin = false;
 
 // প্রোডাক্ট ডাটা
 const initialProducts = [
+{
+        id: "1741713156582",
+        name: "ব্যয়",
+        price: "655",
+        category: "panjabi",
+        image: "https://res.cloudinary.com/dnvm88wfi/image/upload/v1741326259/samples/coffee.jpg",
+        tags: "জিএফ",
+        description: "গ্য"
+    },
     {
         id: "1741449736422",
         name: "Fun ",
